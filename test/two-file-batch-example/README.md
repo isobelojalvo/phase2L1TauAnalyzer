@@ -5,4 +5,4 @@ To run the two file solution:
 
 **For the next step PLEASE run a test job to see that it runs and outputs a file on /hdfs/ before submitting all jobs.** You can do this by changing the bash script to run on only two files like: ```for i in {0..1}```
 
-4. Create and submit the analyzers bash createAnalyzers.sh
+4. Create and submit the analyzers ```bash createAnalyzers.sh```
