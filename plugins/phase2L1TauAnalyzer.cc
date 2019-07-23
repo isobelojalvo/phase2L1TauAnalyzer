@@ -794,7 +794,7 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	 l1RelIsoMedium =  l1PFTaus->at(i).passMediumRelIso();
 	 l1RelIsoTight  =  l1PFTaus->at(i).passTightRelIso();
 
-
+	 
 	 std::cout<<"    Match found l1Pt: "<<l1TauPt<<" Eta: "<<l1TauEta<<" Phi: "<<l1TauPhi<< " Pass tight iso: " << l1PFTaus->at(i).passTightIso() << " Pass VLoose Iso: " << l1PFTaus->at(i).passVLooseIso() <<std::endl;
        }
      }
@@ -819,8 +819,8 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
        }
        
      }
-     if(genPt>0)
-       efficiencyTree->Fill();
+     //if(genPt>0)
+     //efficiencyTree->Fill();
    }
 
    
