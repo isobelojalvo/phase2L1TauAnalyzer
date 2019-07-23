@@ -1,4 +1,4 @@
-To run the two file solution:
+To run the two file solution using farmOutAnalysisJobs:
 1. First place your analyzer in this folder and call it test-Analyzer.py
 2. Next put the Secondary File list in inputFileLst.txt
 3. Create the submit footer files using the commmand ```python dasqueryMiniFEVT.py inputFileList.txt```
