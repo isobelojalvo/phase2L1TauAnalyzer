@@ -1,4 +1,4 @@
-import das_client
+#import das_client
 from sys import argv
 import os
 
