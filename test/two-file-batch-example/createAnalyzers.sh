@@ -6,8 +6,8 @@ do
     cat test-Analyzer.py > SUB-Analyzer-${i}.py
     #echo "process.source.skipEvents = cms.untracked.uint32(${j})" >> SUB-Analyzer-${i}.py
     j=$(( $j + 100))
-    cat submit-$i.py >> SUB-Analyzer-${i}.py
     cat submit.py >> SUB-Analyzer-${i}.py
+    cat submit-$i.py >> SUB-Analyzer-${i}.py
 
     mkdir -p /nfs_scratch/ojalvo/${jobName}/SUB-DYLL-200PU-SUBPhase-$i/dags/daginputs
 
