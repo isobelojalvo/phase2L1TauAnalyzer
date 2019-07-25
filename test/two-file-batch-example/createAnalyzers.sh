@@ -1,4 +1,4 @@
-jobName="2019_Jul27-dyll-test-2"
+jobName="2019_Jul23-dyll-try5"
 #
 j=0
 for i in {0..1}
@@ -11,7 +11,7 @@ do
 
     mkdir -p /nfs_scratch/ojalvo/${jobName}/SUB-DYLL-200PU-SUBPhase-$i/dags/daginputs
 
-    farmoutAnalysisJobs --vsize-limit=7000 --assume-input-files-exist  --input-file-list=inputFileList-mini.txt --output-dir=/hdfs/store/user/ojalvo/${jobName} --submit-dir=/nfs_scratch/ojalvo/${jobName}/SUB-DYLL-200PU-SUBPhase-$i/submit --output-dag-file=/nfs_scratch/ojalvo/${jobName}/SUB-DYLL-200PU-SUBPhase-$i/dags/dag  ${jobName}-DYLL-200PU  $CMSSW_BASE  $CMSSW_BASE/src/L1Trigger/phase2L1TauAnalyzer/test/two-file-batch-example/SUB-Analyzer-$i.py     &
+    farmoutAnalysisJobs --vsize-limit=7000 --assume-input-files-exist  --input-file-list=inputFileList-dummy.txt --output-dir=/hdfs/store/user/ojalvo/${jobName} --submit-dir=/nfs_scratch/ojalvo/${jobName}/SUB-DYLL-200PU-SUBPhase-$i/submit --output-dag-file=/nfs_scratch/ojalvo/${jobName}/SUB-DYLL-200PU-SUBPhase-$i/dags/dag  ${jobName}-DYLL-200PU  $CMSSW_BASE  $CMSSW_BASE/src/L1Trigger/phase2L1TauAnalyzer/test/two-file-batch-example/SUB-Analyzer-$i.py     &
     
     if [ "$i" -eq "15" ]; then
 	wait;

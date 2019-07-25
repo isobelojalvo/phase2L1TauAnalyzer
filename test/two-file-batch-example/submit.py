@@ -1,4 +1,4 @@
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 # Input source
 process.source.fileNames = cms.untracked.vstring($inputFileNames)
