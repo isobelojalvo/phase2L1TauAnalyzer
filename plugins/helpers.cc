@@ -57,7 +57,7 @@ int GetDecayModePiZero(const reco::GenParticle* tau, TLorentzVector &pizero){
     if (TMath::Abs(pdg)==211 || TMath::Abs(pdg)==321) ++counts[3];
     if (TMath::Abs(pdg)==111){
       pizero.SetPtEtaPhiE(tau->daughter(j)->pt(),tau->daughter(j)->eta(),tau->daughter(j)->phi(),tau->daughter(j)->pt());
-      std::cout<<"pizero pt: "<<tau->daughter(j)->pt()<<std::endl;
+      //std::cout<<"pizero pt: "<<tau->daughter(j)->pt()<<std::endl;
     }
     // if (tau->daughter(j)->status() == 1){  //status=1 means no further decay for this daughter
     // std::cout << " " << pdg;
@@ -178,7 +178,7 @@ reco::Candidate::LorentzVector getVisMomentum(const reco::GenParticle* genLeg, c
 {
   std::vector<const reco::GenParticle*> stableDaughters;
   findDaughters(genLeg, stableDaughters, -1);
-  std::cout<<"stableDaughters Size: "<<stableDaughters.size();
+  //std::cout<<"stableDaughters Size: "<<stableDaughters.size();
   reco::Candidate::LorentzVector p4Vis = getVisMomentum(stableDaughters);
 
   return p4Vis;

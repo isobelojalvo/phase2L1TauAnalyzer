@@ -144,6 +144,7 @@ private:
   TTree* threeProngTree;
   
   TTree* efficiencyTree;
+  TTree* efficiencyTreeDZ;
 
   const reco::Vertex *pv;
 
@@ -163,15 +164,39 @@ private:
   double track2_dR, track2_dz;
   double track3_dR, track3_dz;
 
-  double l1Track_pt, l1Track_eta, l1Track_phi;
+  double l1Track_pt, l1Track_eta, l1Track_phi, l1Track_z;
   double l1Track_dR, l1Track_dz, l1Track_dRmin;
   double l1TrackRecoTauPtDiff;
 
+  double genPt_1, genEta_1, genPhi_1, genZ_1, decayMode_1;
+  double recoPt_1, recoEta_1, recoPhi_1, recoDecayMode_1;
+  double l1Pt_1, l1Eta_1, l1Phi_1, l1TauZ_1, l1PVDZ_1;
+  double l1BDTDiscriminant_1;
+  double l1DM_1, l1TauChargedIso_1;
+
+  double l1EoH_1, l1HoE_1; 
+  double l1StripPt_1, l1StripEta_1, l1StripPhi_1, l1StripDR_1;
+  int l1IsoVLoose_1, l1IsoLoose_1, l1IsoMedium_1, l1IsoTight_1;
+
+  double genPt_2, genEta_2, genPhi_2, genZ_2, decayMode_2;
+  double recoPt_2, recoEta_2, recoPhi_2, recoDecayMode_2;
+  double l1Pt_2, l1Eta_2, l1Phi_2, l1TauZ_2, l1PVDZ_2;
+  double l1BDTDiscriminant_2;
+  double l1DM_2, l1TauChargedIso_2;
+
+  double l1EoH_2, l1HoE_2; 
+  double l1StripPt_2, l1StripEta_2, l1StripPhi_2, l1StripDR_2;
+  int l1IsoVLoose_2, l1IsoLoose_2, l1IsoMedium_2, l1IsoTight_2;
+
   double pfCand_pt, pfCand_eta, pfCand_phi;
   double pfCand_dR, pfCand_dRmin, pfCand_dz;
+  double pfCand_HoE, pfCand_isEM;
 
   double l1StripPt, l1StripEta, l1StripPhi;
   double l1StripDR;
+  double l1BDTDiscriminant;
+  double l1HoE;
+  double l1EoH;
 
   double other_track_pt, other_track_eta, other_track_phi, other_track_dR, other_track_dz;
 
@@ -286,6 +311,8 @@ phase2L1TauAnalyzer::phase2L1TauAnalyzer(const edm::ParameterSet& cfg):
   efficiencyTree->Branch("pfCand_phi", &pfCand_phi, "pfCand_phi/D");
   efficiencyTree->Branch("pfCand_dz",  &pfCand_dz, "pfCand_dz/D");
   efficiencyTree->Branch("pfCand_dR",  &pfCand_dR, "pfCand_dR/D");
+  efficiencyTree->Branch("pfCand_HoE",  &pfCand_HoE, "pfCand_HoE/D");
+  efficiencyTree->Branch("pfCand_isEM",  &pfCand_isEM, "pfCand_isEM/D");
 
   efficiencyTree->Branch("l1Pt",  &l1Pt,   "l1Pt/D");
   efficiencyTree->Branch("l1Eta", &l1Eta,   "l1Eta/D");
@@ -293,6 +320,9 @@ phase2L1TauAnalyzer::phase2L1TauAnalyzer(const edm::ParameterSet& cfg):
   efficiencyTree->Branch("l1TauZ", &l1TauZ, "l1TauZ/D");
   efficiencyTree->Branch("zVTX",   &zVTX,   "zVTX/D");
   efficiencyTree->Branch("l1PVDZ", &l1PVDZ, "l1PVDZ/D");
+  efficiencyTree->Branch("l1BDTDiscriminant", &l1BDTDiscriminant, "l1BDTDiscriminant/D");
+  efficiencyTree->Branch("l1EoH",  &l1EoH,   "l1EoH/D");
+  efficiencyTree->Branch("l1HoE",  &l1HoE,   "l1HoE/D");
 
   efficiencyTree->Branch("l1StripPt",  &l1StripPt,  "l1StripPt/D");
   efficiencyTree->Branch("l1StripEta", &l1StripEta, "l1StripEta/D");
@@ -314,6 +344,78 @@ phase2L1TauAnalyzer::phase2L1TauAnalyzer(const edm::ParameterSet& cfg):
   efficiencyTree->Branch("l1RelIsoTight",  &l1RelIsoTight,  "l1RelIsoTight/I");
 
   efficiencyTree->Branch("l1DM", &l1DM,   "l1DM/D");
+
+  efficiencyTreeDZ = fs->make<TTree>("efficiencyTreeDZ", "DZ efficiency tree");
+  efficiencyTreeDZ->Branch("run",    &run,     "run/I");
+  efficiencyTreeDZ->Branch("lumi",   &lumi,    "lumi/I");
+  efficiencyTreeDZ->Branch("event",  &event,   "event/I");
+
+  efficiencyTreeDZ->Branch("zVTX",  &zVTX,   "zVTX/D");
+  
+  efficiencyTreeDZ->Branch("genPt_1",        &genPt_1,           "genPt_1/D");
+  efficiencyTreeDZ->Branch("genEta_1",       &genEta_1,          "genEta_1/D");
+  efficiencyTreeDZ->Branch("genPhi_1",       &genPhi_1,          "genPhi_1/D");
+  efficiencyTreeDZ->Branch("genZ_1",         &genZ_1,            "genZ_1/D");
+  efficiencyTreeDZ->Branch("genDM_1",        &decayMode_1,       "genDM_1/D");
+
+  efficiencyTreeDZ->Branch("recoPt_1",       &recoPt_1,          "recoPt_1/D");
+  efficiencyTreeDZ->Branch("recoEta_1",      &recoEta_1,         "recoEta_1/D");
+  efficiencyTreeDZ->Branch("recoPhi_1",      &recoPhi_1,         "recoPhi_1/D");
+  efficiencyTreeDZ->Branch("recoDM_1",       &recoDecayMode_1,   "recoDM_1/I");
+
+  efficiencyTreeDZ->Branch("l1Pt_1",         &l1Pt_1,            "l1Pt_1/D");
+  efficiencyTreeDZ->Branch("l1Eta_1",        &l1Eta_1,           "l1Eta_1/D");
+  efficiencyTreeDZ->Branch("l1Phi_1",        &l1Phi_1,           "l1Phi_1/D");
+  efficiencyTreeDZ->Branch("l1TauZ_1",       &l1TauZ_1,          "l1TauZ_1/D");
+  efficiencyTreeDZ->Branch("l1PVDZ_1",       &l1PVDZ_1,          "l1PVDZ_1/D");
+  efficiencyTreeDZ->Branch("l1BDTDiscriminant_1", &l1BDTDiscriminant_1, "l1BDTDiscriminant_1/D");
+  efficiencyTreeDZ->Branch("l1EoH_1",        &l1EoH_1,           "l1EoH_1/D");
+  efficiencyTreeDZ->Branch("l1HoE_1",        &l1HoE_1,           "l1HoE_1/D");
+  efficiencyTreeDZ->Branch("l1DM_1",         &l1DM_1,            "l1DM_1/D");
+  efficiencyTreeDZ->Branch("l1TauChargedIso_1", &l1TauChargedIso_1, "l1TauChargedIso_1/D");
+
+  efficiencyTreeDZ->Branch("l1StripPt_1",    &l1StripPt_1,       "l1StripPt_1/D");
+  efficiencyTreeDZ->Branch("l1StripEta_1",   &l1StripEta_1,      "l1StripEta_1/D");
+  efficiencyTreeDZ->Branch("l1StripPhi_1",   &l1StripPhi_1,      "l1StripPhi_1/D");
+  efficiencyTreeDZ->Branch("l1StripDR_1",    &l1StripDR_1,       "l1StripDR_1/D");
+  efficiencyTreeDZ->Branch("l1ChargedIso_1", &l1TauChargedIso_1, "l1ChargedIso_1/D");
+
+  efficiencyTreeDZ->Branch("l1IsoVLoose_1",  &l1IsoVLoose_1,     "l1IsoVLoose_1/I");
+  efficiencyTreeDZ->Branch("l1IsoLoose_1",   &l1IsoLoose_1,      "l1IsoLoose_1/I");
+  efficiencyTreeDZ->Branch("l1IsoMedium_1",  &l1IsoMedium_1,     "l1IsoMedium_1/I");
+  efficiencyTreeDZ->Branch("l1IsoTight_1",   &l1IsoTight_1,      "l1IsoTight_1/I");
+
+  efficiencyTreeDZ->Branch("genPt_2",        &genPt_2,           "genPt_2/D");
+  efficiencyTreeDZ->Branch("genEta_2",       &genEta_2,          "genEta_2/D");
+  efficiencyTreeDZ->Branch("genPhi_2",       &genPhi_2,          "genPhi_2/D");
+  efficiencyTreeDZ->Branch("genZ_2",         &genZ_2,            "genZ_2/D");
+  efficiencyTreeDZ->Branch("genDM_2",        &decayMode_2,       "genDM_2/D");
+
+  efficiencyTreeDZ->Branch("recoPt_2",       &recoPt_2,          "recoPt_2/D");
+  efficiencyTreeDZ->Branch("recoEta_2",      &recoEta_2,         "recoEta_2/D");
+  efficiencyTreeDZ->Branch("recoPhi_2",      &recoPhi_2,         "recoPhi_2/D");
+  efficiencyTreeDZ->Branch("recoDM_2",       &recoDecayMode_2,   "recoDM_2/I");
+
+  efficiencyTreeDZ->Branch("l1Pt_2",         &l1Pt_2,            "l1Pt_2/D");
+  efficiencyTreeDZ->Branch("l1Eta_2",        &l1Eta_2,           "l1Eta_2/D");
+  efficiencyTreeDZ->Branch("l1Phi_2",        &l1Phi_2,           "l1Phi_2/D");
+  efficiencyTreeDZ->Branch("l1TauZ_2",       &l1TauZ_2,          "l1TauZ_2/D");
+  efficiencyTreeDZ->Branch("l1PVDZ_2",       &l1PVDZ_2,          "l1PVDZ_2/D");
+  efficiencyTreeDZ->Branch("l1BDTDiscriminant_2", &l1BDTDiscriminant_2, "l1BDTDiscriminant_2/D");
+  efficiencyTreeDZ->Branch("l1EoH_2",        &l1EoH_2,           "l1EoH_2/D");
+  efficiencyTreeDZ->Branch("l1HoE_2",        &l1HoE_2,           "l1HoE_2/D");
+  efficiencyTreeDZ->Branch("l1DM_2",         &l1DM_2,            "l1DM_2/D");
+
+  efficiencyTreeDZ->Branch("l1StripPt_2",    &l1StripPt_2,       "l1StripPt_2/D");
+  efficiencyTreeDZ->Branch("l1StripEta_2",   &l1StripEta_2,      "l1StripEta_2/D");
+  efficiencyTreeDZ->Branch("l1StripPhi_2",   &l1StripPhi_2,      "l1StripPhi_2/D");
+  efficiencyTreeDZ->Branch("l1StripDR_2",    &l1StripDR_2,       "l1StripDR_2/D");
+  efficiencyTreeDZ->Branch("l1ChargedIso_2", &l1TauChargedIso_2, "l1ChargedIso_2/D");
+
+  efficiencyTreeDZ->Branch("l1IsoVLoose_2",  &l1IsoVLoose_2,     "l1IsoVLoose_2/I");
+  efficiencyTreeDZ->Branch("l1IsoLoose_2",   &l1IsoLoose_2,      "l1IsoLoose_2/I");
+  efficiencyTreeDZ->Branch("l1IsoMedium_2",  &l1IsoMedium_2,     "l1IsoMedium_2/I");
+  efficiencyTreeDZ->Branch("l1IsoTight_2",   &l1IsoTight_2,      "l1IsoTight_2/I");
 
 
   pi0Tree = fs->make<TTree>("pi0Tree", "Crystal cluster individual crystal pt values");
@@ -547,7 +649,7 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       // Commenting out this requirement for now:
       //      if(l1PFCand.id() == l1t::PFCandidate::ChargedHadron || (l1PFCand.pt()<5 && l1PFCand.id() == l1t::PFCandidate::Electron)){
       pfChargedHadrons.push_back(l1PFCand);
-      continue;
+      //continue;
       
     }
   // end of PF Candidates
@@ -734,8 +836,8 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   edm::Handle<GenParticleCollectionType> genParticleHandle;
   if(!iEvent.getByToken(genToken_,genParticleHandle))
     std::cout<<"No gen Particles Found "<<std::endl;
-  else
-    std::cout<<"Gen Particles size "<<genParticleHandle->size()<<std::endl;
+  //else
+  //std::cout<<"Gen Particles size "<<genParticleHandle->size()<<std::endl;
 
   std::vector<reco::GenParticle> genTaus;
   std::vector<reco::GenParticle> genPiZeros;
@@ -782,7 +884,7 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     //std::cout<<"tau vis pt: "<<genPt<<" genEta: "<<genEta<<" genPhi: "<<genPhi<<std::endl;
 
     if(decayMode >21 ){
-      std::cout<<"found 3 prong tau: "<<decayMode<<std::endl;
+      //std::cout<<"found 3 prong tau: "<<decayMode<<std::endl;
       GenThreeProngTaus.push_back(Temp);
     }
 
@@ -812,7 +914,7 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       recoNeutralIso = miniTaus->at(i).tauID("neutralIsoPtSum");
       recoRawIso     = miniTaus->at(i).tauID("byCombinedIsolationDeltaBetaCorrRaw3Hits");
       recoDecayMode  = miniTaus->at(i).decayMode();
-      std::cout<<"=== Found recoTau: "<<recoPt<<" Eta: "<<recoEta<<" Phi: "<< recoPhi <<std::endl;
+      //std::cout<<"=== Found recoTau: "<<recoPt<<" Eta: "<<recoEta<<" Phi: "<< recoPhi <<std::endl;
     }
     else{
       continue;
@@ -844,9 +946,9 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	}
     }
 
-    printf("l1Track_dR is %f for the closest l1 Track to the recoTau.\n", l1Track_dR);
-    printf("l1TrackRecoTauPtDiff is %f for the closest l1 Track (l1Track_pt = %f) to the recoTau with recoPt %f\n",
-	   l1TrackRecoTauPtDiff, l1Track_pt, recoPt);
+    // printf("l1Track_dR is %f for the closest l1 Track to the recoTau.\n", l1Track_dR);
+    //printf("l1TrackRecoTauPtDiff is %f for the closest l1 Track (l1Track_pt = %f) to the recoTau with recoPt %f\n",
+    //	   l1TrackRecoTauPtDiff, l1Track_pt, recoPt);
 
     // Get the PF Cand that is closest to the recoTau.
     pfCand_pt = 0;
@@ -869,12 +971,17 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	    pfCand_phi = l1PFCand.p4().phi();
 	    pfCand_dz = l1PFCand.vz() - L1VertexHandle->at(0).getZvertex();
 	    pfCand_dRmin = pfCand_dR;
-
+	    pfCand_HoE = -5;
+	    pfCand_isEM = -5;
+	    if(l1PFCand.pfCluster().isNonnull()){
+	      pfCand_HoE = l1PFCand.pfCluster()->hOverE();
+	      pfCand_isEM = l1PFCand.pfCluster()->isEM();
+	    }
 	  }
       }
     
-    printf("pfCand_dR is %f for the closest PF Cand to recoTau.\n", pfCand_dR);
-    printf("pfCand_pt is %f, recoPt is %f (difference is %f).\n", pfCand_pt, recoPt, pfCand_pt - recoPt);
+    //printf("pfCand_dR is %f for the closest PF Cand to recoTau.\n", pfCand_dR);
+    //printf("pfCand_pt is %f, recoPt is %f (difference is %f).\n", pfCand_pt, recoPt, pfCand_pt - recoPt);
      
     l1Pt = 0;
     l1Eta = -10;
@@ -887,17 +994,20 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     l1IsoLoose = -10;
     l1IsoMedium = -10;
     l1IsoTight = -10;
-
+    l1BDTDiscriminant = -10;
+    
     zVTX = 0;
     l1TauZ = 0;
     l1PVDZ = 0;  // delta Z = tau's z minus zVTX
-     
+    l1HoE = 0;
+    l1EoH = 0;
+    
     l1RelIsoVLoose = -10;
     l1RelIsoLoose = -10;
     l1RelIsoMedium = -10;
     l1RelIsoTight = -10;
 
-    std::cout << "l1PFTaus size: " << l1PFTaus->size() << std::endl;
+    //std::cout << "l1PFTaus size: " << l1PFTaus->size() << std::endl;
 
     // Set primary vertex z position
     if (L1VertexHandle->size() > 0)
@@ -921,7 +1031,7 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	  l1Phi = l1PFTaus->at(i).phi();
 	  l1Pt  = l1PFTaus->at(i).pt();
 
-	  l1TauZ = l1PFTaus->at(i).p4().z();   // adding in z position of tau
+	  l1TauZ = l1PFTaus->at(i).z0();   // adding in z position of tau
 
 	  l1StripPt  = l1PFTaus->at(i).strip_p4().pt();
 	  l1StripEta = l1PFTaus->at(i).strip_p4().eta();
@@ -930,13 +1040,15 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 				    l1PFTaus->at(i).phi(),
 				    l1PFTaus->at(i).strip_p4().eta(),
 				    l1PFTaus->at(i).strip_p4().phi());
+	  l1HoE =   l1PFTaus->at(i).HoE();
+	  l1EoH =   l1PFTaus->at(i).EoH();
 	  if (L1VertexHandle->size() > 0)
 	    {
 	      l1PVDZ = l1TauZ - zVTX;
-	      std::cout << "l1TauPVDZ (without reco/l1 matching): " << l1PVDZ << std::endl;
+	      //std::cout << "l1TauPVDZ (without reco/l1 matching): " << l1PVDZ << std::endl;
 	    }
 
-
+	  l1BDTDiscriminant = l1PFTaus->at(i).discriminant();
 	  l1TauChargedIso = l1PFTaus->at(i).chargedIso();
 	  l1TauNeutralIso = l1PFTaus->at(i).neutralIso();
 	  l1TauRawIso = l1PFTaus->at(i).rawIso();
@@ -951,13 +1063,13 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	  l1RelIsoMedium =  l1PFTaus->at(i).passMediumRelIso();
 	  l1RelIsoTight  =  l1PFTaus->at(i).passTightRelIso();
 
-	     
+	  /*
 	  std::cout<<" Match found l1Pt: "<< l1Pt <<
 	    " Eta: "<< l1Eta  <<
 	    " Phi: "<< l1Phi  << 
 	    " Pass tight iso: " << l1PFTaus->at(i).passTightIso() <<
 	    " Pass VLoose Iso: " << l1PFTaus->at(i).passVLooseIso() <<
-	    std::endl;
+	    std::endl;*/
 	}
        
     } // end of loop over L1 taus
@@ -979,14 +1091,200 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	genEta = visGenTau.eta();
 	genPhi = visGenTau.phi();
 	decayMode = GetDecayMode(&genTau);
-	std::cout<<"    tau vis pt: "<<genPt<<" genEta: "<<genEta<<" genPhi: "<<genPhi<<std::endl;
+	//std::cout<<"    tau vis pt: "<<genPt<<" genEta: "<<genEta<<" genPhi: "<<genPhi<<std::endl;
       }
     }
        
     efficiencyTree->Fill();
 
-  } // end of loop over reco (miniTaus)
+  } // end of loop over reco
    
+  ////// time for DZ check
+  //for(auto genTau: genTaus){
+  if(genTaus.size() > 1){
+    reco::Candidate::LorentzVector visGenTau_1 = getVisMomentum(&genTaus.at(0), &genParticles);
+    reco::Candidate::LorentzVector visGenTau_2 = getVisMomentum(&genTaus.at(1), &genParticles);
+    genVisTau Temp_1;
+    genVisTau Temp_2;
+    
+    if(reco::deltaR(visGenTau_1.eta(),visGenTau_1.phi(),visGenTau_2.eta(),visGenTau_2.phi()) > 0.5){
+      
+      genPt_1  = visGenTau_1.pt();
+      genEta_1 = visGenTau_1.eta();
+      genPhi_1 = visGenTau_1.phi();
+      genZ_1   = visGenTau_1.z();
+      decayMode_1 = GetDecayMode(&genTaus.at(0));
+
+      genPt_2  = visGenTau_2.pt();
+      genEta_2 = visGenTau_2.eta();
+      genPhi_2 = visGenTau_2.phi();
+      genZ_2   = visGenTau_2.z();
+      decayMode_2 = GetDecayMode(&genTaus.at(1));
+      std::cout<<"    tau vis pt: "<<genPt_1<<" genEta_1: "<<genEta_1<<" genPhi_1: "<<genPhi_1<< " genDM_1: "<< decayMode_1 << "genZ_1: "<< visGenTau_1.z()<<std::endl;
+      std::cout<<"    tau vis pt: "<<genPt_2<<" genEta_2: "<<genEta_2<<" genPhi_2: "<<genPhi_2<< " genDM_2: "<< decayMode_2 << "genZ_2: "<< visGenTau_2.z()<<std::endl;
+
+      recoEta_1        = -99;
+      recoPhi_1        = -99;
+      recoPt_1         = -99;
+      //recoChargedIso_1 = -99;
+      recoDecayMode_1  = -99;
+      
+      recoEta_2        = -99;
+      recoPhi_2        = -99;
+      recoPt_2         = -99;
+      //recoChargedIso_2 = -99;
+      recoDecayMode_2  = -99;
+      
+      for(unsigned int i = 0; i < miniTaus->size(); i++){
+	if(reco::deltaR(miniTaus->at(i).p4(),visGenTau_1)<0.5){
+	  recoEta_1        = miniTaus->at(i).p4().Eta();
+	  recoPhi_1        = miniTaus->at(i).p4().Phi();
+	  recoPt_1         = miniTaus->at(i).p4().Pt();
+	  //recoChargedIso_1 = miniTaus->at(i).tauID("chargedIsoPtSum");
+	  recoDecayMode_1  = miniTaus->at(i).decayMode();
+	}
+	if(reco::deltaR(miniTaus->at(i).p4(),visGenTau_2)<0.5){
+	  recoEta_2        = miniTaus->at(i).p4().Eta();
+	  recoPhi_2        = miniTaus->at(i).p4().Phi();
+	  recoPt_2         = miniTaus->at(i).p4().Pt();
+	  //recoChargedIso_2 = miniTaus->at(i).tauID("chargedIsoPtSum");
+	  recoDecayMode_2  = miniTaus->at(i).decayMode();
+	}
+      }
+      
+      
+      l1Pt_1        = 0;
+      l1Eta_1       = -10;
+      l1Phi_1       = -10;
+      l1DM_1        = -10;
+      l1IsoVLoose_1 = -10;
+      l1IsoLoose_1  = -10;
+      l1IsoMedium_1 = -10;
+      l1IsoTight_1  = -10;
+      l1BDTDiscriminant_1 = -10;
+      
+      zVTX     = 0;
+      l1TauZ_1 = 0;
+      l1PVDZ_1 = 0;  // delta Z = tau's z minus zVTX
+      l1HoE_1  = 0;
+      l1EoH_1  = 0;
+      
+      l1Pt_2        = 0;
+      l1Eta_2       = -10;
+      l1Phi_2       = -10;
+      l1DM_2        = -10;
+      l1IsoVLoose_2 = -10;
+      l1IsoLoose_2  = -10;
+      l1IsoMedium_2 = -10;
+      l1IsoTight_2  = -10;
+      l1BDTDiscriminant_2 = -10;
+      
+      l1TauZ_2 = 0;
+      l1PVDZ_2 = 0;  // delta Z = tau's z minus zVTX
+      l1HoE_2  = 0;
+      l1EoH_2  = 0;
+      
+      //std::cout << "l1PFTaus size: " << l1PFTaus->size() << std::endl;
+      
+      for(unsigned int i = 0; i < l1PFTaus->size(); i++){
+	/*       std::cout << "l1PFTaus->at(i).p4().Eta() = " << l1PFTaus->at(i).p4().Eta() << "   "
+	       << "l1PFTaus->at(i).p4().Phi() = " << l1PFTaus->at(i).p4().Phi() << "   " 
+	       << "recoEta = " << recoEta << "   " 
+	       << "recoPhi = " << recoPhi << "   "
+	       << "l1PFTaus->at(i).p4().pt() = " << l1PFTl1TauNeutralIso_1 = l1PFTaus->at(i).neutralIso();
+	       l1TauRawIso_1 = l1PFTaus->at(i).rawIso();
+	       l1DM_1        = l1PFTaus->at(i).tauType();
+	       l1IsoVLoose_1 =  l1PFTaus->at(i).passVLooseIso();
+	       l1IsoLoose_1  =  l1PFTaus->at(i).passLooseIso();
+	       l1IsoMedium_1 =  l1PFTaus->at(i).passMediumIso();
+	       l1IsoTight_1  =  l1PFTaus->at(i).passTightIso();
+	*/
+	  /*
+	    std::cout<<" Match found l1Pt: "<< l1Pt <<
+	    " Eta: "<< l1Eta  <<
+	    " Phi: "<< l1Phi  << 
+	    " Pass tight iso: " << l1PFTaus->at(i).passTightIso() <<
+	    " Pass VLoose Iso: " << l1PFTaus->at(i).passVLooseIso() <<
+	    std::endl;*/
+	
+	if(( reco::deltaR(l1PFTaus->at(i).p4(), visGenTau_1) < 0.5 )
+	   && (l1PFTaus->at(i).pt() > l1Pt_1))
+	  {
+	    l1Eta_1 = l1PFTaus->at(i).eta();
+	    l1Phi_1 = l1PFTaus->at(i).phi();
+	    l1Pt_1  = l1PFTaus->at(i).pt();
+	    
+	    l1TauZ_1 = l1PFTaus->at(i).z0();   // adding in z position of tau
+	    std::cout<<"L1 Match 1 Pt: "<< l1Pt_1 << " Eta: "<< l1Eta_1<<" Phi: "<<l1Phi_1 <<" Z0: "<<l1TauZ_1<<" Z: "<< l1PFTaus->at(i).p4().z()<<std::endl;	    
+	    l1StripPt_1  = l1PFTaus->at(i).strip_p4().pt();
+	    l1StripEta_1 = l1PFTaus->at(i).strip_p4().eta();
+	    l1StripPhi_1 = l1PFTaus->at(i).strip_p4().phi();
+	    l1StripDR_1  = reco::deltaR(l1PFTaus->at(i).eta(),
+					l1PFTaus->at(i).phi(),
+					l1PFTaus->at(i).strip_p4().eta(),
+					l1PFTaus->at(i).strip_p4().phi());
+	    l1HoE_1 =   l1PFTaus->at(i).HoE();
+	    l1EoH_1 =   l1PFTaus->at(i).EoH();
+	    if (L1VertexHandle->size() > 0)
+	      {
+		l1PVDZ = l1TauZ_1 - zVTX;
+		//std::cout << "l1TauPVDZ (without reco/l1 matching): " << l1PVDZ << std::endl;
+	      }
+
+	    l1BDTDiscriminant_1 = l1PFTaus->at(i).discriminant();
+	    l1TauChargedIso_1 = l1PFTaus->at(i).chargedIso();
+	    l1DM_1        = l1PFTaus->at(i).tauType();
+	    l1IsoVLoose_1 =  l1PFTaus->at(i).passVLooseIso();
+	    l1IsoLoose_1  =  l1PFTaus->at(i).passLooseIso();
+	    l1IsoMedium_1 =  l1PFTaus->at(i).passMediumIso();
+	    l1IsoTight_1  =  l1PFTaus->at(i).passTightIso();
+	    
+	  }
+	
+
+	if(( reco::deltaR(l1PFTaus->at(i).p4(), visGenTau_2) < 0.5 )
+	   && (l1PFTaus->at(i).pt() > l1Pt_2))
+	  {
+	    l1Eta_2 = l1PFTaus->at(i).eta();
+	    l1Phi_2 = l1PFTaus->at(i).phi();
+	    l1Pt_2  = l1PFTaus->at(i).pt();
+	    
+	    l1TauZ_2 = l1PFTaus->at(i).z0();   // adding in z position of tau
+	    std::cout<<"L1 Match 2 Pt: "<< l1Pt_2 << " Eta: "<< l1Eta_2<<" Phi: "<<l1Phi_2 <<" Z0: "<<l1TauZ_2<<" Z: "<< l1PFTaus->at(i).p4().z()<<std::endl;
+	    l1StripPt_2  = l1PFTaus->at(i).strip_p4().pt();
+	    l1StripEta_2 = l1PFTaus->at(i).strip_p4().eta();
+	    l1StripPhi_2 = l1PFTaus->at(i).strip_p4().phi();
+	    l1StripDR_2  = reco::deltaR(l1PFTaus->at(i).eta(),
+					l1PFTaus->at(i).phi(),
+					l1PFTaus->at(i).strip_p4().eta(),
+					l1PFTaus->at(i).strip_p4().phi());
+	    l1HoE_2 =   l1PFTaus->at(i).HoE();
+	    l1EoH_2 =   l1PFTaus->at(i).EoH();
+	    if (L1VertexHandle->size() > 0)
+	      {
+		l1PVDZ = l1TauZ_2 - zVTX;
+		//std::cout << "l1TauPVDZ (without reco/l1 matching): " << l1PVDZ << std::endl;
+	      }
+	    
+	    l1BDTDiscriminant_2 = l1PFTaus->at(i).discriminant();
+	    l1TauChargedIso_2 = l1PFTaus->at(i).chargedIso();
+	    l1DM_2        = l1PFTaus->at(i).tauType();
+	    l1IsoVLoose_2 =  l1PFTaus->at(i).passVLooseIso();
+	    l1IsoLoose_2  =  l1PFTaus->at(i).passLooseIso();
+	    l1IsoMedium_2 =  l1PFTaus->at(i).passMediumIso();
+	    l1IsoTight_2  =  l1PFTaus->at(i).passTightIso();
+	    
+	  }
+	
+      } // end of loop over L1 taus
+      
+      efficiencyTreeDZ->Fill();
+    }
+  } // end of loop over reco
+
+
+
+
   for(auto genTau: GenThreeProngTaus){
     genPt  = genTau.p4.pt();
     genEta = genTau.p4.eta();
@@ -1022,7 +1320,7 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	       
 	    if(j==0){
 	      pfCand_1 = dynamic_cast<pat::PackedCandidate const*>(iter->get());
-	      std::cout<<"track 1 pt: "<<(pfCand_1)->pt()<<" eta: "<<(pfCand_1)->eta()<<" phi: "<<(pfCand_1)->phi()<<std::endl;
+	      //std::cout<<"track 1 pt: "<<(pfCand_1)->pt()<<" eta: "<<(pfCand_1)->eta()<<" phi: "<<(pfCand_1)->phi()<<std::endl;
 	      tempP4_track1.SetPt((pfCand_1)->pt()); 
 	      tempP4_track1.SetEta((pfCand_1)->eta()); 
 	      tempP4_track1.SetPhi((pfCand_1)->phi());
@@ -1035,7 +1333,7 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	    if(j==1){
 	      pfCand_2 = dynamic_cast<pat::PackedCandidate const*>(iter->get());
 	      //std::cout<<"track 2 pt: "<<track2_pt<<" eta: "<<track2_eta<<" phi: "<<track2_phi<<std::endl;
-	      std::cout<<"track 2 pt: "<<(pfCand_2)->pt()<<" eta: "<< (pfCand_2)->eta() <<" phi: "<< (pfCand_2)->phi() <<std::endl;
+	      //std::cout<<"track 2 pt: "<<(pfCand_2)->pt()<<" eta: "<< (pfCand_2)->eta() <<" phi: "<< (pfCand_2)->phi() <<std::endl;
 	      tempP4_track2.SetPt((pfCand_2)->pt()); 
 	      tempP4_track2.SetEta((pfCand_2)->eta()); 
 	      tempP4_track2.SetPhi((pfCand_2)->phi());
@@ -1052,7 +1350,7 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
 	    if(j==2){
 	      pfCand_3 = dynamic_cast<pat::PackedCandidate const*>(iter->get());
-	      std::cout<<"track 3 pt: "<<(pfCand_3)->pt()<<" eta: "<< (pfCand_3)->eta() <<" phi: "<< (pfCand_3)->phi() <<std::endl;
+	      //std::cout<<"track 3 pt: "<<(pfCand_3)->pt()<<" eta: "<< (pfCand_3)->eta() <<" phi: "<< (pfCand_3)->phi() <<std::endl;
 	      tempP4_track3.SetPt((pfCand_3)->pt()); 
 	      tempP4_track3.SetEta((pfCand_3)->eta()); 
 	      tempP4_track3.SetPhi((pfCand_3)->phi());
@@ -1098,14 +1396,14 @@ phase2L1TauAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	      }
 	    }
 	  }
-	  std::cout<<"Filling the tree"<<std::endl;
+	  //std::cout<<"Filling the tree"<<std::endl;
 	  threeProngTree->Fill();
 	}
     }
      
   }
    
-  std::cout<<"Finished Analyzing the Taus"<<std::endl;
+  // std::cout<<"Finished Analyzing the Taus"<<std::endl;
 }
 
 
